@@ -1,80 +1,56 @@
 import { PortfolioItem, Category } from "../types";
 
-// This URL is derived from the "Published to Web" link of your Google Sheet.
-// This is the most reliable way to fetch data without CORS errors in a browser.
-// Make sure "File > Share > Publish to web" is active on your sheet.
-const PUBLISHED_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQt3ufQQgIVsriiR8y5FL7hIkY4xuo7Bt50_WLqFYUex4waRmWAbcMQvdDS-vQUWClXM_z_f8CjlYfc/pub?gid=0&single=true&output=csv';
-
-// Helper to handle CSV parsing with potential quoted strings
-const parseCSVLine = (str: string): string[] => {
-  const result = [];
-  let current = '';
-  let inQuote = false;
-  
-  for (let i = 0; i < str.length; i++) {
-    const char = str[i];
-    
-    if (char === '"') {
-      inQuote = !inQuote;
-    } else if (char === ',' && !inQuote) {
-      result.push(current.trim());
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  result.push(current.trim());
-  return result;
-};
+// Apunta a tu servidor local Node.js
+const API_URL = 'http://localhost:3001/api/sheet';
 
 export const fetchPortfolioFromSheet = async (): Promise<PortfolioItem[] | null> => {
   try {
-    // Append timestamp to avoid stale cache errors
-    const response = await fetch(`${PUBLISHED_CSV_URL}&t=${Date.now()}`);
+    const response = await fetch(API_URL);
     
     if (!response.ok) {
-      console.error(`Sheet fetch failed: ${response.status} ${response.statusText}`);
-      throw new Error('Failed to fetch sheet');
+      console.error(`Backend error: ${response.status}`);
+      throw new Error('Error conectando con el servidor backend (server.js)');
     }
     
-    const text = await response.text();
-    const rows = text.split('\n').map(row => row.trim()).filter(row => row.length > 0);
-    
-    // Remove header row
-    const dataRows = rows.slice(1);
-    
-    const items: PortfolioItem[] = dataRows.map(row => {
-      const cols = parseCSVLine(row);
-      
-      // Helper to clean quotes
-      const clean = (s: string) => s ? s.replace(/^"|"$/g, '').replace(/""/g, '"') : '';
+    const data = await response.json();
+    const rows = data.values; // El backend devuelve { values:Array[][] }
 
-      // Handle tags splitting by comma or pipe
-      const rawTags = clean(cols[5]);
+    if (!rows || rows.length === 0) return [];
+
+    // Mapeamos las filas (Array de strings) a objetos PortfolioItem
+    const items: PortfolioItem[] = rows.map((cols: string[]) => {
+      // Helper para obtener valor seguro (si la columna está vacía)
+      const get = (i: number) => cols[i] ? cols[i].trim() : '';
+      
+      const rawTags = get(5);
       let tags: string[] = [];
       if (rawTags) {
-        // Split by comma OR pipe
+        // Soporta separación por comas o barras verticales
         tags = rawTags.split(/,|\|/).map(t => t.trim()).filter(t => t.length > 0);
       }
 
       return {
-        id: clean(cols[0]) || Date.now().toString(),
-        title: clean(cols[1]) || 'Untitled',
-        description: clean(cols[2]) || '',
-        category: (clean(cols[3]) as Category) || Category.MODELING_3D,
-        thumbnailUrl: clean(cols[4]) || 'https://picsum.photos/400/400',
+        id: get(0) || Date.now().toString(),
+        title: get(1) || 'Untitled',
+        description: get(2) || '',
+        // Casteo seguro al enum Category
+        category: (Object.values(Category).includes(get(3) as Category) 
+          ? get(3) as Category 
+          : Category.MODELING_3D),
+        thumbnailUrl: get(4) || 'https://picsum.photos/400/400',
         tags: tags,
-        modelUrl: clean(cols[6]) || undefined,
-        videoUrl: clean(cols[7]) || undefined,
-        explanation: clean(cols[8]) || undefined,
-        gameEmbedUrl: clean(cols[9]) || undefined,
-        externalLink: clean(cols[10]) || undefined,
+        modelUrl: get(6) || undefined,
+        videoUrl: get(7) || undefined,
+        explanation: get(8) || undefined,
+        gameEmbedUrl: get(9) || undefined,
+        externalLink: get(10) || undefined,
       };
     });
 
     return items;
   } catch (error) {
-    console.error("Error loading from Google Sheets:", error);
+    console.error("Error cargando desde API Backend:", error);
+    // Retornar null hará que App.tsx use los datos de respaldo locales
     return null;
   }
 };
