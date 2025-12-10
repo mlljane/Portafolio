@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio 3D & Dev - Vista Previa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Rajdhani', 'sans-serif'],
+                    },
+                    colors: {
+                        accent: '#8b5cf6',
+                        dark: '#0f172a',
+                        surface: '#1e293b',
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at center, rgba(67, 56, 202, 0.4) 0%, rgba(2, 6, 23, 1) 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-white/5">
+        <div class="container mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="text-2xl font-display font-bold tracking-wider cursor-pointer hover:text-accent transition-colors" onclick="showSection('HOME')">
+                ALEX<span class="text-accent">.DEV</span>
+            </div>
+            <div class="hidden md:flex gap-8 items-center">
+                <button onclick="showSection('HOME')" class="nav-btn text-sm font-semibold tracking-wide hover:text-accent transition-colors" data-section="HOME">INICIO</button>
+                <button onclick="showSection('MODELING_3D')" class="nav-btn text-sm font-semibold tracking-wide hover:text-accent transition-colors text-slate-400" data-section="MODELING_3D">3D</button>
+                <button onclick="showSection('ANIMATION_2D')" class="nav-btn text-sm font-semibold tracking-wide hover:text-accent transition-colors text-slate-400" data-section="ANIMATION_2D">ANIMACIÓN</button>
+                <button onclick="showSection('GAME_DEV')" class="nav-btn text-sm font-semibold tracking-wide hover:text-accent transition-colors text-slate-400" data-section="GAME_DEV">GAMES</button>
+            </div>
+            <button class="md:hidden p-2" onclick="toggleMobileMenu()">☰</button>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden absolute top-20 left-0 w-full bg-slate-900 border-b border-slate-800 p-6 flex flex-col gap-4 shadow-xl">
+            <button onclick="showSection('HOME'); toggleMobileMenu();" class="text-left py-2 border-b border-slate-800">INICIO</button>
+            <button onclick="showSection('MODELING_3D'); toggleMobileMenu();" class="text-left py-2 border-b border-slate-800">MODELADO 3D</button>
+            <button onclick="showSection('ANIMATION_2D'); toggleMobileMenu();" class="text-left py-2 border-b border-slate-800">ANIMACIÓN</button>
+            <button onclick="showSection('GAME_DEV'); toggleMobileMenu();" class="text-left py-2">VIDEOJUEGOS</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- HOME Section -->
+        <section id="section-HOME" class="section">
+            <div class="space-y-24 pb-20">
+                <!-- Hero -->
+                <div class="relative h-[80vh] flex items-center justify-center overflow-hidden">
+                    <div class="absolute inset-0 z-0">
+                        <div class="absolute top-[-20%] left-[-20%] w-[140%] h-[140%] hero-gradient"></div>
+                    </div>
+                    <div class="container mx-auto px-6 relative z-10 text-center">
+                        <h1 class="text-6xl md:text-8xl font-display font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+                            ALEX CREATOR
+                        </h1>
+                        <p class="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto mb-10 font-light">
+                            Modelado 3D • Animación Digital • Game Development
+                        </p>
+                        <div class="flex flex-col md:flex-row gap-4 justify-center">
+                            <button onclick="showSection('MODELING_3D')" class="px-8 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full font-semibold transition-all shadow-[0_0_20px_rgba(8,145,178,0.4)] hover:scale-105">
+                                📦 Ver Modelos 3D
+                            </button>
+                            <button onclick="showSection('GAME_DEV')" class="px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-full font-semibold transition-all shadow-[0_0_20px_rgba(147,51,234,0.4)] hover:scale-105">
+                                🎮 Jugar Demos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About -->
+                <section class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <h2 class="text-4xl font-display font-bold text-white border-l-4 border-accent pl-4">Sobre Mí</h2>
+                        <p class="text-slate-400 text-lg leading-relaxed">
+                            Soy un artista técnico apasionado por crear mundos inmersivos. Con más de 5 años de experiencia, 
+                            me especializo en cerrar la brecha entre el arte conceptual y la implementación en motor de juego.
+                            Me encanta optimizar assets para VR/AR sin sacrificar la calidad visual.
+                        </p>
+                        <div class="flex gap-4 pt-4">
+                            <a href="#" class="p-3 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors text-white">🔗</a>
+                            <a href="#" class="p-3 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors text-blue-400">💼</a>
+                            <a href="#" class="p-3 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors text-sky-400">🐦</a>
+                            <a href="mailto:contact@example.com" class="p-3 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors text-red-400">✉</a>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl transform hover:rotate-0 transition-transform duration-500">
+                        <h3 class="text-xl font-bold mb-4 text-center">Tech Stack</h3>
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div class="p-2 bg-slate-900/50 rounded border border-slate-700 text-sm text-cyan-200">Blender</div>
+                            <div class="p-2 bg-slate-900/50 rounded border border-slate-700 text-sm text-cyan-200">Maya</div>
+                            <div class="p-2 bg-slate-900/50 rounded border border-slate-700 text-sm text-cyan-200">ZBrush</div>
+                            <div class="p-2 bg-slate-900/50 rounded border border-slate-700 text-sm text-cyan-200">Unity</div>
+                            <div class="p-2 bg-slate-900/50 rounded border border-slate-700 text-sm text-cyan-200">Unreal</div>
+                            <div class="p-2 bg-slate-900/50 rounded border border-slate-700 text-sm text-cyan-200">Substance</div>
+                            <div class="p-2 bg-slate-900/50 rounded border border-slate-700 text-sm text-cyan-200">React</div>
+                            <div class="p-2 bg-slate-900/50 rounded border border-slate-700 text-sm text-cyan-200">Three.js</div>
+                            <div class="p-2 bg-slate-900/50 rounded border border-slate-700 text-sm text-cyan-200">Python</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <!-- MODELING_3D Section -->
+        <section id="section-MODELING_3D" class="section hidden">
+            <div class="container mx-auto px-6 py-24 min-h-screen">
+                <h2 class="text-4xl font-display font-bold mb-12 flex items-center gap-3">
+                    📦 Galería 3D
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="glass-panel rounded-xl overflow-hidden group hover:border-accent/50 transition-all duration-300">
+                        <div class="relative h-[400px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
+                            <div id="viewer-1" class="w-full h-full" style="min-height: 400px;"></div>
+                            <div class="absolute top-4 left-4 z-10">
+                                <span class="bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-cyan-400 border border-cyan-500/30">
+                                    🔄 3D INTERACTIVO
+                                </span>
+                            </div>
+                            <div class="absolute bottom-4 left-0 w-full text-center pointer-events-none">
+                                <span class="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-[10px] font-mono text-white/70 uppercase tracking-widest">
+                                    Click y Arrastra para Girar
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">Blender</span>
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">Substance</span>
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">Low-Poly</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Cyberpunk Bot</h3>
+                            <p class="text-slate-400 text-sm">Personaje low-poly optimizado para juegos móviles. Rigging completo y texturas PBR.</p>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-xl overflow-hidden group hover:border-accent/50 transition-all duration-300">
+                        <div class="relative h-[400px] overflow-hidden bg-slate-900">
+                            <img src="https://picsum.photos/400/400?random=2" alt="Ancient Ruins" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">ZBrush</span>
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">Unreal Engine 5</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Ancient Ruins Environment</h3>
+                            <p class="text-slate-400 text-sm">Escenario modular para un RPG de fantasía. Incluye LODs y colisiones personalizadas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANIMATION_2D Section -->
+        <section id="section-ANIMATION_2D" class="section hidden">
+            <div class="container mx-auto px-6 py-24 min-h-screen">
+                <h2 class="text-4xl font-display font-bold mb-12 flex items-center gap-3">
+                    🎬 Animaciones
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="glass-panel rounded-xl overflow-hidden group hover:border-accent/50 transition-all duration-300">
+                        <div class="relative h-64 overflow-hidden bg-slate-900">
+                            <img src="https://picsum.photos/600/350?random=3" alt="The Lost Signal" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">Toon Boom</span>
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">After Effects</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">The Lost Signal</h3>
+                            <p class="text-slate-400 text-sm">Cortometraje animado frame-by-frame sobre un robot buscando su hogar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GAME_DEV Section -->
+        <section id="section-GAME_DEV" class="section hidden">
+            <div class="container mx-auto px-6 py-24 min-h-screen">
+                <h2 class="text-4xl font-display font-bold mb-12 flex items-center gap-3">
+                    🎮 Game Lab
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="glass-panel rounded-xl overflow-hidden group hover:border-accent/50 transition-all duration-300">
+                        <div class="relative h-64 overflow-hidden bg-slate-900">
+                            <img src="https://picsum.photos/600/350?random=4" alt="Neon Racer DX" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">Unity</span>
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">C#</span>
+                                <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">WebGL</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Neon Racer DX</h3>
+                            <p class="text-slate-400 text-sm mb-4">Juego de carreras infinitas estilo retro-wave.</p>
+                            <button class="w-full py-2 bg-purple-600 hover:bg-purple-500 rounded flex items-center justify-center gap-2 font-semibold">
+                                ▶ Jugar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Info Banner -->
+    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-yellow-900/90 backdrop-blur-sm border border-yellow-600 rounded-lg px-6 py-3 text-center max-w-2xl">
+        <p class="text-yellow-200 text-sm font-bold">
+            ⚠️ VISTA PREVIA SIMPLIFICADA - Para la versión completa con todas las funcionalidades (chat IA, modelos 3D interactivos, etc.), ejecuta: 
+            <code class="bg-black/50 px-2 py-1 rounded text-yellow-300">npm run dev</code>
+        </p>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // Viewer initialization
+        let viewer1Scene, viewer1Camera, viewer1Renderer, viewer1Controls, viewer1Model;
+        let viewer1Interacted = false;
+
+        function initViewer1() {
+            const container = document.getElementById('viewer-1');
+            if (!container) return;
+
+            // Clear container first
+            container.innerHTML = '';
+
+            // Wait for container to have proper dimensions
+            const width = container.clientWidth || 400;
+            const height = container.clientHeight || 400;
+
+            // Scene setup
+            viewer1Scene = new THREE.Scene();
+            viewer1Scene.background = null; // Transparent background
+            
+            viewer1Camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            viewer1Camera.position.set(0, 0, 5);
+            
+            viewer1Renderer = new THREE.WebGLRenderer({ 
+                antialias: true, 
+                alpha: true,
+                powerPreference: "high-performance"
+            });
+            viewer1Renderer.setSize(width, height);
+            viewer1Renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            viewer1Renderer.outputColorSpace = THREE.SRGBColorSpace;
+            viewer1Renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            viewer1Renderer.toneMappingExposure = 1;
+            viewer1Renderer.shadowMap.enabled = true;
+            viewer1Renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            // Make canvas fill container
+            viewer1Renderer.domElement.style.width = '100%';
+            viewer1Renderer.domElement.style.height = '100%';
+            viewer1Renderer.domElement.style.display = 'block';
+            
+            container.appendChild(viewer1Renderer.domElement);
+
+            // Improved lighting setup
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+            viewer1Scene.add(ambientLight);
+            
+            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight1.position.set(5, 10, 5);
+            directionalLight1.castShadow = true;
+            viewer1Scene.add(directionalLight1);
+            
+            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight2.position.set(-5, 5, -5);
+            viewer1Scene.add(directionalLight2);
+            
+            const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
+            hemisphereLight.position.set(0, 10, 0);
+            viewer1Scene.add(hemisphereLight);
+
+            // Controls
+            viewer1Controls = new OrbitControls(viewer1Camera, viewer1Renderer.domElement);
+            viewer1Controls.enableDamping = true;
+            viewer1Controls.dampingFactor = 0.1;
+            viewer1Controls.minPolarAngle = 0;
+            viewer1Controls.maxPolarAngle = Math.PI / 1.8;
+            viewer1Controls.minDistance = 2;
+            viewer1Controls.maxDistance = 10;
+            viewer1Controls.autoRotate = true;
+            viewer1Controls.autoRotateSpeed = 1;
+
+            viewer1Controls.addEventListener('start', () => {
+                viewer1Interacted = true;
+                viewer1Controls.autoRotate = false;
+            });
+
+            // Load model
+            const loader = new GLTFLoader();
+            loader.load(
+                './3dModels/scene.gltf',
+                (gltf) => {
+                    viewer1Model = gltf.scene;
+                    
+                    // Enable shadows on model
+                    viewer1Model.traverse((child) => {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                            // Ensure materials are properly set
+                            if (child.material) {
+                                child.material.needsUpdate = true;
+                            }
+                        }
+                    });
+                    
+                    viewer1Scene.add(viewer1Model);
+                    
+                    // Calculate bounding box and center/scale model
+                    const box = new THREE.Box3().setFromObject(viewer1Model);
+                    
+                    if (!box.isEmpty()) {
+                        const center = box.getCenter(new THREE.Vector3());
+                        const size = box.getSize(new THREE.Vector3());
+                        const maxDim = Math.max(size.x, size.y, size.z);
+                        
+                        if (maxDim > 0) {
+                            const scale = 2.5 / maxDim;
+                            viewer1Model.scale.multiplyScalar(scale);
+                            
+                            // Center the model
+                            const newBox = new THREE.Box3().setFromObject(viewer1Model);
+                            const newCenter = newBox.getCenter(new THREE.Vector3());
+                            viewer1Model.position.sub(newCenter);
+                        }
+                    }
+                    
+                    // Position camera to view model
+                    viewer1Camera.position.set(0, 0, 5);
+                    viewer1Controls.target.set(0, 0, 0);
+                    viewer1Controls.update();
+                },
+                (progress) => {
+                    if (progress.lengthComputable) {
+                        const percentComplete = progress.loaded / progress.total * 100;
+                        console.log('Loading model:', Math.round(percentComplete) + '%');
+                    }
+                },
+                (error) => {
+                    console.error('Error loading model:', error);
+                    container.innerHTML = '<div class="flex items-center justify-center h-full text-red-400 p-4 text-center"><div><p class="font-bold mb-2">Error cargando modelo 3D</p><p class="text-sm text-red-300">Verifica que el archivo ./3dModels/scene.gltf exista</p></div></div>';
+                }
+            );
+
+            // Handle resize
+            const handleResize = () => {
+                if (!container || !viewer1Renderer || !viewer1Camera) return;
+                
+                const newWidth = container.clientWidth || width;
+                const newHeight = container.clientHeight || height;
+                
+                viewer1Camera.aspect = newWidth / newHeight;
+                viewer1Camera.updateProjectionMatrix();
+                viewer1Renderer.setSize(newWidth, newHeight);
+            };
+            
+            window.addEventListener('resize', handleResize);
+
+            // Animation loop
+            let animationId;
+            function animate() {
+                animationId = requestAnimationFrame(animate);
+                
+                if (viewer1Controls) {
+                    if (!viewer1Interacted) {
+                        viewer1Controls.autoRotate = true;
+                    }
+                    viewer1Controls.update();
+                }
+                
+                if (viewer1Renderer && viewer1Scene && viewer1Camera) {
+                    viewer1Renderer.render(viewer1Scene, viewer1Camera);
+                }
+            }
+            animate();
+        }
+
+        // Initialize viewer when 3D section is shown
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(el => el.classList.add('hidden'));
+            // Show selected section
+            const targetSection = document.getElementById(`section-${section}`);
+            targetSection.classList.remove('hidden');
+            
+            // Initialize viewer if showing 3D section
+            if (section === 'MODELING_3D') {
+                // Wait a bit for DOM to update
+                setTimeout(() => {
+                    if (!viewer1Scene) {
+                        initViewer1();
+                    }
+                }, 200);
+            }
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.dataset.section === section) {
+                    btn.classList.remove('text-slate-400');
+                    btn.classList.add('text-accent');
+                } else {
+                    btn.classList.remove('text-accent');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Make functions globally available
+        window.showSection = showSection;
+        window.toggleMobileMenu = toggleMobileMenu;
+    </script>
+</body>
+</html>
