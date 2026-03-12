@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #1A1625;
+  color: #E8E4F3;
+  @apply font-body antialiased;
+}
+
+.glass-panel {
+  position: relative;
+  @apply rounded-2xl border border-border bg-card;
+}
+
+.soft-shadow {
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.35);
+}
+
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(138, 217, 230, 0.25), transparent 55%),
+    radial-gradient(circle at 78% 32%, rgba(245, 200, 168, 0.26), transparent 58%),
+    radial-gradient(circle at 40% 86%, rgba(243, 164, 199, 0.22), transparent 55%),
+    repeating-linear-gradient(
+      115deg,
+      rgba(25, 30, 70, 0.03) 0px,
+      rgba(25, 30, 70, 0.03) 2px,
+      transparent 2px,
+      transparent 10px
+    );
+  mix-blend-mode: multiply;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.glass-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
